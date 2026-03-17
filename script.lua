@@ -8,7 +8,7 @@ local LocalPlayer = Players.LocalPlayer
 -- SETTINGS
 local HitboxEnabled = false
 local ESPEnabled = false
-local HitboxSize = 30000 -- ✅ tối ưu
+local HitboxSize = 15000
 
 -- THÔNG BÁO
 pcall(function()
