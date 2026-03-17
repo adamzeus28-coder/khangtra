@@ -8,7 +8,7 @@ local LocalPlayer = Players.LocalPlayer
 -- SETTINGS
 local HitboxEnabled = false
 local ESPEnabled = false
-local HitboxSize = 15000
+local HitboxSize = 10000
 
 -- THÔNG BÁO
 pcall(function()
@@ -36,9 +36,12 @@ logo.TextColor3 = Color3.fromRGB(0,255,0)
 logo.BackgroundColor3 = Color3.fromRGB(0,0,0)
 Instance.new("UICorner",logo).CornerRadius = UDim.new(1,0)
 
--- XOAY LOGO (mượt hơn)
-RunService.RenderStepped:Connect(function()
-logo.Rotation = logo.Rotation + 1
+-- LOGO XOAY
+task.spawn(function()
+while true do
+logo.Rotation = logo.Rotation + 2
+task.wait(0.02)
+end
 end)
 
 -- MENU
@@ -80,37 +83,50 @@ hitboxButton.TextSize = 18
 hitboxButton.BackgroundColor3 = Color3.fromRGB(90,90,90)
 Instance.new("UICorner",hitboxButton)
 
--- DRAG
+-- DRAG FUNCTION
 local function dragify(obj)
+
 local dragging=false
 local dragStart
 local startPos
 
 obj.InputBegan:Connect(function(input)
-if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+
+if input.UserInputType == Enum.UserInputType.Touch
+or input.UserInputType == Enum.UserInputType.MouseButton1 then
+
 dragging=true
 dragStart=input.Position
 startPos=obj.Position
 
 input.Changed:Connect(function()
+
 if input.UserInputState == Enum.UserInputState.End then
 dragging=false
 end
+
 end)
+
 end
 end)
 
 obj.InputChanged:Connect(function(input)
+
 if dragging then
+
 local delta=input.Position-dragStart
+
 obj.Position=UDim2.new(
 startPos.X.Scale,
 startPos.X.Offset+delta.X,
 startPos.Y.Scale,
 startPos.Y.Offset+delta.Y
 )
+
 end
+
 end)
+
 end
 
 dragify(logo)
@@ -120,47 +136,62 @@ logo.MouseButton1Click:Connect(function()
 frame.Visible = not frame.Visible
 end)
 
--- TUYẾT (giảm lag)
+-- TUYẾT RƠI
 task.spawn(function()
+
 while true do
+
 if frame.Visible then
+
 local snow = Instance.new("Frame")
 snow.Parent = frame
 snow.Size = UDim2.new(0,4,0,4)
 snow.Position = UDim2.new(math.random(),0,-0.1,0)
 snow.BackgroundColor3 = Color3.new(1,1,1)
 snow.BorderSizePixel = 0
+
 Instance.new("UICorner",snow).CornerRadius = UDim.new(1,0)
 
-TweenService:Create(snow,TweenInfo.new(4),{
-Position = UDim2.new(math.random(),0,1,0)
-}):Play()
+TweenService:Create(
+snow,
+TweenInfo.new(4),
+{Position = UDim2.new(math.random(),0,1,0)}
+):Play()
 
 game:GetService("Debris"):AddItem(snow,4)
 
-task.wait(0.2) -- ✅ giảm spam
+task.wait(0.1)
+
 else
-task.wait(0.4)
+task.wait(0.3)
 end
+
 end
+
 end)
 
--- BUTTON
+-- BUTTONS
 espButton.MouseButton1Click:Connect(function()
+
 ESPEnabled = not ESPEnabled
 espButton.Text = ESPEnabled and "ESP : ON" or "ESP : OFF"
+
 end)
 
 hitboxButton.MouseButton1Click:Connect(function()
+
 HitboxEnabled = not HitboxEnabled
 hitboxButton.Text = HitboxEnabled and "HITBOX : ON" or "HITBOX : OFF"
+
 end)
 
--- PLAYER FEATURES (tối ưu loop)
+-- PLAYER FEATURES
 local function applyFeatures(player)
+
 if player == LocalPlayer then return end
 
 local function setup(char)
+
 local hrp = char:WaitForChild("HumanoidRootPart")
 
 -- ESP
@@ -179,24 +210,29 @@ box.AlwaysOnTop = true
 box.Adornee = hrp
 box.Parent = char
 
--- LOOP CHUNG (nhẹ hơn)
-RunService.Heartbeat:Connect(function()
+RunService.RenderStepped:Connect(function()
+
 highlight.Enabled = ESPEnabled
 box.Visible = ESPEnabled
 
 if HitboxEnabled then
+
 hrp.Size = Vector3.new(HitboxSize,HitboxSize,HitboxSize)
 hrp.Transparency = 0.4
 hrp.Material = Enum.Material.Neon
 hrp.Color = Color3.fromRGB(255,255,255)
 hrp.CanCollide = false
+
 else
+
 hrp.Size = Vector3.new(2,2,1)
 hrp.Transparency = 1
+
 end
+
 end)
 
--- NAME RAINBOW
+-- TÊN 7 MÀU
 local billboard = Instance.new("BillboardGui")
 billboard.Parent = char
 billboard.Size = UDim2.new(0,100,0,40)
@@ -212,6 +248,7 @@ text.TextScaled = true
 text.Font = Enum.Font.Arcade
 
 task.spawn(function()
+
 local colors = {
 Color3.fromRGB(255,0,0),
 Color3.fromRGB(255,127,0),
@@ -223,11 +260,14 @@ Color3.fromRGB(148,0,211)
 }
 
 while text.Parent do
+
 for _,c in pairs(colors) do
 text.TextColor3 = c
-task.wait(0.4) -- mượt hơn
+task.wait(0.3)
 end
+
 end
+
 end)
 
 end
@@ -237,6 +277,7 @@ setup(player.Character)
 end
 
 player.CharacterAdded:Connect(setup)
+
 end
 
 for _,p in pairs(Players:GetPlayers()) do
