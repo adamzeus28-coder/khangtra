@@ -1,86 +1,4 @@
--- ================= ZEUS KEY SYSTEM =================
-
-local unlocked = false
-
-local keyUI = Instance.new("ScreenGui", game.CoreGui)
-keyUI.ResetOnSpawn = false
-
-local main = Instance.new("Frame", keyUI)
-main.Size = UDim2.new(0,300,0,180)
-main.Position = UDim2.new(0.5,-150,0.5,-90)
-main.BackgroundColor3 = Color3.fromRGB(20,20,20)
-Instance.new("UICorner", main)
-
-local title = Instance.new("TextLabel", main)
-title.Size = UDim2.new(1,0,0,40)
-title.BackgroundTransparency = 1
-title.Text = "ZEUS KEY SYSTEM"
-title.TextColor3 = Color3.fromRGB(0,255,255)
-title.Font = Enum.Font.Arcade
-title.TextSize = 22
-
-local box = Instance.new("TextBox", main)
-box.Size = UDim2.new(0.8,0,0,35)
-box.Position = UDim2.new(0.1,0,0.3,0)
-box.PlaceholderText = "Nhập key..."
-box.Text = ""
-box.Font = Enum.Font.Arcade
-box.TextSize = 18
-Instance.new("UICorner", box)
-
-local getKey = Instance.new("TextButton", main)
-getKey.Size = UDim2.new(0.8,0,0,30)
-getKey.Position = UDim2.new(0.1,0,0.55,0)
-getKey.Text = "GET KEY"
-getKey.Font = Enum.Font.Arcade
-getKey.TextSize = 18
-getKey.BackgroundColor3 = Color3.fromRGB(0,170,255)
-Instance.new("UICorner", getKey)
-
-local check = Instance.new("TextButton", main)
-check.Size = UDim2.new(0.8,0,0,30)
-check.Position = UDim2.new(0.1,0,0.75,0)
-check.Text = "XÁC NHẬN"
-check.Font = Enum.Font.Arcade
-check.TextSize = 18
-check.BackgroundColor3 = Color3.fromRGB(0,255,0)
-Instance.new("UICorner", check)
-
--- LINK 4M (.com)
-getKey.MouseButton1Click:Connect(function()
-    setclipboard("https://link4m.com/o2lp2xx")
-
-    game:GetService("StarterGui"):SetCore("SendNotification",{
-        Title="GET KEY",
-        Text="Đã copy link! Mở trình duyệt để lấy key",
-        Duration=5
-    })
-end)
-
--- CHECK KEY (DUY NHẤT)
-check.MouseButton1Click:Connect(function()
-    if box.Text == "zeus-admin" then
-        unlocked = true
-        keyUI:Destroy()
-
-        game:GetService("StarterGui"):SetCore("SendNotification",{
-            Title="SUCCESS",
-            Text="Key đúng!",
-            Duration=5
-        })
-    else
-        game:GetService("StarterGui"):SetCore("SendNotification",{
-            Title="ERROR",
-            Text="Sai key!",
-            Duration=5
-        })
-    end
-end)
-
-repeat task.wait() until unlocked
-
--- ================= END KEY SYSTEM =================
-
+-- ================= KEY SYSTEM =================
 
 local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
@@ -89,21 +7,138 @@ local RunService = game:GetService("RunService")
 
 local LocalPlayer = Players.LocalPlayer
 
--- SETTINGS
-local HitboxEnabled = false
-local ESPEnabled = false
-local HitboxSize = 10000
+local keyUI = Instance.new("ScreenGui", game.CoreGui)
+keyUI.ResetOnSpawn = false
 
--- THÔNG BÁO
-pcall(function()
-game.StarterGui:SetCore("SendNotification",{
-Title="ZEUS HUB",
-Text="Chào "..LocalPlayer.Name.." cảm ơn bạn đã sài script tiktok @zeus_brainrot",
-Duration=6
-})
+local main = Instance.new("Frame", keyUI)
+main.Size = UDim2.new(0,300,0,200)
+main.Position = UDim2.new(0.5,-150,0.5,-100)
+main.BackgroundColor3 = Color3.fromRGB(255,255,255)
+main.BackgroundTransparency = 0.4
+Instance.new("UICorner", main)
+
+local stroke = Instance.new("UIStroke", main)
+stroke.Color = Color3.fromRGB(0,170,255)
+
+local title = Instance.new("TextLabel", main)
+title.Size = UDim2.new(1,0,0,40)
+title.BackgroundTransparency = 1
+title.Text = "ZEUS KEY SYSTEM"
+title.Font = Enum.Font.Arcade
+title.TextSize = 22
+title.TextColor3 = Color3.fromRGB(0,170,255)
+
+local box = Instance.new("TextBox", main)
+box.Size = UDim2.new(0.8,0,0,35)
+box.Position = UDim2.new(0.1,0,0.3,0)
+box.PlaceholderText = "Vui lòng nhập key!"
+box.BackgroundTransparency = 0.3
+box.Font = Enum.Font.Arcade
+box.TextSize = 18
+Instance.new("UICorner", box)
+
+-- GET KEY
+local getKey = Instance.new("TextButton", main)
+getKey.Size = UDim2.new(0.8,0,0,30)
+getKey.Position = UDim2.new(0.1,0,0.55,0)
+getKey.Text = "GET KEY"
+getKey.BackgroundTransparency = 0.3
+Instance.new("UICorner", getKey)
+
+getKey.MouseButton1Click:Connect(function()
+    setclipboard("https://link4m.com/o2lp2xx")
+    game:GetService("StarterGui"):SetCore("SendNotification",{
+        Title="GET KEY",
+        Text="Đã copy link!",
+        Duration=5
+    })
 end)
 
--- GUI
+-- CHECK KEY
+local check = Instance.new("TextButton", main)
+check.Size = UDim2.new(0.8,0,0,30)
+check.Position = UDim2.new(0.1,0,0.75,0)
+check.Text = "XÁC NHẬN"
+check.BackgroundTransparency = 0.3
+Instance.new("UICorner", check)
+
+local unlocked = false
+local expireTime = nil
+
+check.MouseButton1Click:Connect(function()
+    local input = box.Text
+
+    -- KEY VĨNH VIỄN
+    if input == "Zeus-khangtra" then
+        unlocked = true
+        keyUI.Enabled = false
+
+        game:GetService("StarterGui"):SetCore("SendNotification",{
+            Title="ADMIN",
+            Text="Key vĩnh viễn!",
+            Duration=5
+        })
+        return
+    end
+
+    -- KEY CÓ THỜI GIAN
+    local key, time, unit = string.match(input, "^(Zeus_%w+) %((%d+)([hd])%)$")
+
+    if key and time and unit then
+        local seconds = tonumber(time)
+
+        if unit == "h" then
+            seconds = seconds * 3600
+        elseif unit == "d" then
+            seconds = seconds * 86400
+        end
+
+        expireTime = os.time() + seconds
+        unlocked = true
+        keyUI.Enabled = false
+
+        game:GetService("StarterGui"):SetCore("SendNotification",{
+            Title="THÀNH CÔNG",
+            Text="Key đúng! ("..time..unit..")",
+            Duration=5
+        })
+    else
+        game:GetService("StarterGui"):SetCore("SendNotification",{
+            Title="LỖI",
+            Text="Sai key!",
+            Duration=5
+        })
+    end
+end)
+
+repeat task.wait() until unlocked
+
+-- AUTO CHECK HẾT HẠN
+task.spawn(function()
+    while true do
+        if expireTime and os.time() > expireTime then
+            unlocked = false
+            keyUI.Enabled = true
+
+            game:GetService("StarterGui"):SetCore("SendNotification",{
+                Title="HẾT HẠN",
+                Text="Key đã hết hạn!",
+                Duration=5
+            })
+            break
+        end
+        task.wait(5)
+    end
+end)
+
+-- ================= SETTINGS =================
+
+local HitboxEnabled = false
+local ESPEnabled = false
+local HitboxSize = 20000
+
+-- ================= GUI =================
+
 local gui = Instance.new("ScreenGui")
 gui.Parent = game.CoreGui
 gui.ResetOnSpawn = false
@@ -116,101 +151,90 @@ logo.Position = UDim2.new(0.05,0,0.6,0)
 logo.Text = "Z"
 logo.Font = Enum.Font.Arcade
 logo.TextSize = 35
-logo.TextColor3 = Color3.fromRGB(0,255,0)
-logo.BackgroundColor3 = Color3.fromRGB(0,0,0)
+logo.TextColor3 = Color3.fromRGB(0,170,255)
+logo.BackgroundColor3 = Color3.fromRGB(255,255,255)
+logo.BackgroundTransparency = 0.4
 Instance.new("UICorner",logo).CornerRadius = UDim.new(1,0)
 
--- LOGO XOAY
+-- XOAY LOGO
 task.spawn(function()
 while true do
-logo.Rotation = logo.Rotation + 2
+logo.Rotation += 2
 task.wait(0.02)
 end
 end)
 
--- MENU
+-- MENU GLASS
 local frame = Instance.new("Frame")
 frame.Parent = gui
 frame.Size = UDim2.new(0,240,0,180)
 frame.Position = UDim2.new(0.5,-120,0.5,-90)
-frame.BackgroundColor3 = Color3.fromRGB(45,45,45)
+frame.BackgroundColor3 = Color3.fromRGB(255,255,255)
+frame.BackgroundTransparency = 0.4
 frame.Visible = false
 Instance.new("UICorner",frame)
 
+local stroke2 = Instance.new("UIStroke", frame)
+stroke2.Color = Color3.fromRGB(0,170,255)
+
 -- TITLE
-local title2 = Instance.new("TextLabel")
-title2.Parent = frame
+local title2 = Instance.new("TextLabel",frame)
 title2.Size = UDim2.new(1,0,0,40)
 title2.BackgroundTransparency = 1
 title2.Text = "Zeus Hub v2"
 title2.Font = Enum.Font.Arcade
 title2.TextSize = 24
-title2.TextColor3 = Color3.fromRGB(0,255,0)
+title2.TextColor3 = Color3.fromRGB(0,170,255)
 
--- ESP BUTTON
+-- BUTTONS
 local espButton = Instance.new("TextButton",frame)
 espButton.Size = UDim2.new(0.8,0,0,35)
 espButton.Position = UDim2.new(0.1,0,0.4,0)
 espButton.Text = "ESP : OFF"
-espButton.Font = Enum.Font.Arcade
-espButton.TextSize = 18
-espButton.BackgroundColor3 = Color3.fromRGB(90,90,90)
+espButton.BackgroundTransparency = 0.3
 Instance.new("UICorner",espButton)
 
--- HITBOX BUTTON
 local hitboxButton = Instance.new("TextButton",frame)
 hitboxButton.Size = UDim2.new(0.8,0,0,35)
 hitboxButton.Position = UDim2.new(0.1,0,0.7,0)
 hitboxButton.Text = "HITBOX : OFF"
-hitboxButton.Font = Enum.Font.Arcade
-hitboxButton.TextSize = 18
-hitboxButton.BackgroundColor3 = Color3.fromRGB(90,90,90)
+hitboxButton.BackgroundTransparency = 0.3
 Instance.new("UICorner",hitboxButton)
 
--- DRAG FUNCTION
-local function dragify(obj)
+-- DRAG FIX
+local function dragify(Frame)
+    local dragToggle = false
+    local dragInput, dragStart, startPos
 
-local dragging=false
-local dragStart
-local startPos
+    local function update(input)
+        local delta = input.Position - dragStart
+        Frame.Position = UDim2.new(
+            startPos.X.Scale,
+            startPos.X.Offset + delta.X,
+            startPos.Y.Scale,
+            startPos.Y.Offset + delta.Y
+        )
+    end
 
-obj.InputBegan:Connect(function(input)
+    Frame.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1
+        or input.UserInputType == Enum.UserInputType.Touch then
+            dragToggle = true
+            dragStart = input.Position
+            startPos = Frame.Position
+        end
+    end)
 
-if input.UserInputType == Enum.UserInputType.Touch
-or input.UserInputType == Enum.UserInputType.MouseButton1 then
+    UIS.InputChanged:Connect(function(input)
+        if dragToggle and (input.UserInputType == Enum.UserInputType.MouseMovement
+        or input.UserInputType == Enum.UserInputType.Touch) then
+            update(input)
+        end
+    end)
 
-dragging=true
-dragStart=input.Position
-startPos=obj.Position
-
-input.Changed:Connect(function()
-
-if input.UserInputState == Enum.UserInputState.End then
-dragging=false
-end
-
-end)
-
-end
-end)
-
-obj.InputChanged:Connect(function(input)
-
-if dragging then
-
-local delta=input.Position-dragStart
-
-obj.Position=UDim2.new(
-startPos.X.Scale,
-startPos.X.Offset+delta.X,
-startPos.Y.Scale,
-startPos.Y.Offset+delta.Y
-)
-
-end
-
-end)
-
+    Frame.InputEnded:Connect(function()
+        dragToggle = false
+    end)
 end
 
 dragify(logo)
@@ -220,106 +244,65 @@ logo.MouseButton1Click:Connect(function()
 frame.Visible = not frame.Visible
 end)
 
--- TUYẾT RƠI
+-- TUYẾT
 task.spawn(function()
-
 while true do
-
 if frame.Visible then
-
 local snow = Instance.new("Frame")
 snow.Parent = frame
 snow.Size = UDim2.new(0,4,0,4)
 snow.Position = UDim2.new(math.random(),0,-0.1,0)
 snow.BackgroundColor3 = Color3.new(1,1,1)
 snow.BorderSizePixel = 0
-
 Instance.new("UICorner",snow).CornerRadius = UDim.new(1,0)
 
-TweenService:Create(
-snow,
-TweenInfo.new(4),
-{Position = UDim2.new(math.random(),0,1,0)}
-):Play()
+TweenService:Create(snow,TweenInfo.new(4),{
+Position = UDim2.new(math.random(),0,1,0)
+}):Play()
 
 game:GetService("Debris"):AddItem(snow,4)
-
 task.wait(0.1)
-
 else
 task.wait(0.3)
 end
-
 end
-
 end)
 
--- BUTTONS
+-- BUTTON LOGIC
 espButton.MouseButton1Click:Connect(function()
-
 ESPEnabled = not ESPEnabled
 espButton.Text = ESPEnabled and "ESP : ON" or "ESP : OFF"
-
 end)
 
 hitboxButton.MouseButton1Click:Connect(function()
-
 HitboxEnabled = not HitboxEnabled
 hitboxButton.Text = HitboxEnabled and "HITBOX : ON" or "HITBOX : OFF"
-
 end)
 
--- PLAYER FEATURES
-local function applyFeatures(player)
-
+-- APPLY ESP + HITBOX
+local function apply(player)
 if player == LocalPlayer then return end
 
 local function setup(char)
-
 local hrp = char:WaitForChild("HumanoidRootPart")
 
--- ESP
 local highlight = Instance.new("Highlight")
-highlight.FillColor = Color3.fromRGB(170,0,255)
-highlight.OutlineColor = Color3.fromRGB(170,0,255)
-highlight.FillTransparency = 0.2
-highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
 highlight.Parent = char
+highlight.FillTransparency = 1
+highlight.OutlineColor = Color3.fromRGB(0,170,255)
 
 local box = Instance.new("BoxHandleAdornment")
+box.Parent = char
+box.Adornee = hrp
 box.Size = Vector3.new(4,6,2)
-box.Color3 = Color3.fromRGB(170,0,255)
+box.Color3 = Color3.fromRGB(0,170,255)
 box.Transparency = 0.5
 box.AlwaysOnTop = true
-box.Adornee = hrp
-box.Parent = char
 
-RunService.RenderStepped:Connect(function()
-
-highlight.Enabled = ESPEnabled
-box.Visible = ESPEnabled
-
-if HitboxEnabled then
-
-hrp.Size = Vector3.new(HitboxSize,HitboxSize,HitboxSize)
-hrp.Transparency = 0.4
-hrp.Material = Enum.Material.Neon
-hrp.Color = Color3.fromRGB(255,255,255)
-hrp.CanCollide = false
-
-else
-
-hrp.Size = Vector3.new(2,2,1)
-hrp.Transparency = 1
-
-end
-
-end)
-
--- TÊN 7 MÀU
+-- NAME 7 MÀU NHỎ
 local billboard = Instance.new("BillboardGui")
 billboard.Parent = char
-billboard.Size = UDim2.new(0,100,0,40)
+billboard.Size = UDim2.new(0,100,0,30)
 billboard.StudsOffset = Vector3.new(0,3,0)
 billboard.AlwaysOnTop = true
 
@@ -328,11 +311,10 @@ text.Parent = billboard
 text.Size = UDim2.new(1,0,1,0)
 text.BackgroundTransparency = 1
 text.Text = player.Name
-text.TextScaled = true
+text.TextSize = 14
 text.Font = Enum.Font.Arcade
 
 task.spawn(function()
-
 local colors = {
 Color3.fromRGB(255,0,0),
 Color3.fromRGB(255,127,0),
@@ -344,14 +326,26 @@ Color3.fromRGB(148,0,211)
 }
 
 while text.Parent do
-
 for _,c in pairs(colors) do
 text.TextColor3 = c
 task.wait(0.3)
 end
-
 end
+end)
 
+RunService.RenderStepped:Connect(function()
+highlight.Enabled = ESPEnabled
+box.Visible = ESPEnabled
+billboard.Enabled = ESPEnabled
+
+if HitboxEnabled then
+hrp.Size = Vector3.new(20000,20000,20000)
+hrp.Transparency = 0.5
+hrp.CanCollide = false
+else
+hrp.Size = Vector3.new(2,2,1)
+hrp.Transparency = 1
+end
 end)
 
 end
@@ -361,11 +355,10 @@ setup(player.Character)
 end
 
 player.CharacterAdded:Connect(setup)
-
 end
 
 for _,p in pairs(Players:GetPlayers()) do
-applyFeatures(p)
+apply(p)
 end
 
-Players.PlayerAdded:Connect(applyFeatures)
+Players.PlayerAdded:Connect(apply)
