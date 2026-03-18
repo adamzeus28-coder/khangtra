@@ -4,11 +4,40 @@ local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
+local HttpService = game:GetService("HttpService") -- 🔥 THÊM
 
 local LocalPlayer = Players.LocalPlayer
 
+-- 🔥 FILE LƯU KEY
+local KEY_FILE = "zeus_key.json"
+local KEY_VALID_TIME = 24 * 60 * 60
+
+local function saveKey()
+    local data = {
+        time = os.time()
+    }
+    writefile(KEY_FILE, HttpService:JSONEncode(data))
+end
+
+local function isKeySaved()
+    if not isfile(KEY_FILE) then return false end
+
+    local success, data = pcall(function()
+        return HttpService:JSONDecode(readfile(KEY_FILE))
+    end)
+
+    if not success or not data.time then return false end
+
+    return (os.time() - data.time) < KEY_VALID_TIME
+end
+
 local keyUI = Instance.new("ScreenGui", game.CoreGui)
 keyUI.ResetOnSpawn = false
+
+-- 🔥 NẾU ĐÃ NHẬP KEY TRONG 24H → ẨN UI
+if isKeySaved() then
+    keyUI.Enabled = false
+end
 
 local main = Instance.new("Frame", keyUI)
 main.Size = UDim2.new(0,300,0,200)
@@ -65,6 +94,11 @@ Instance.new("UICorner", check)
 local unlocked = false
 local expireTime = nil
 
+-- 🔥 NẾU ĐÃ LƯU KEY → AUTO UNLOCK
+if isKeySaved() then
+    unlocked = true
+end
+
 check.MouseButton1Click:Connect(function()
     local input = box.Text
 
@@ -72,6 +106,8 @@ check.MouseButton1Click:Connect(function()
     if input == "Zeus-khangtra" then
         unlocked = true
         keyUI.Enabled = false
+
+        saveKey() -- 🔥 LƯU 24H
 
         game:GetService("StarterGui"):SetCore("SendNotification",{
             Title="ADMIN",
@@ -97,6 +133,8 @@ check.MouseButton1Click:Connect(function()
         unlocked = true
         keyUI.Enabled = false
 
+        saveKey() -- 🔥 LƯU 24H
+
         game:GetService("StarterGui"):SetCore("SendNotification",{
             Title="THÀNH CÔNG",
             Text="Key đúng! ("..time..unit..")",
@@ -113,25 +151,35 @@ end)
 
 repeat task.wait() until unlocked
 
--- AUTO CHECK HẾT HẠN
-task.spawn(function()
-    while true do
-        if expireTime and os.time() > expireTime then
-            unlocked = false
-            keyUI.Enabled = true
+-- KEY VĨNH VIỄN
+if input == "Zeus-admin" then
+    unlocked = true
+    keyUI.Enabled = false
 
-            game:GetService("StarterGui"):SetCore("SendNotification",{
-                Title="HẾT HẠN",
-                Text="Key đã hết hạn!",
-                Duration=5
-            })
-            break
-        end
-        task.wait(5)
-    end
-end)
+    saveKey()
 
--- ================= SETTINGS =================
+    game:GetService("StarterGui"):SetCore("SendNotification",{
+        Title="ADMIN",
+        Text="Chào admin!",
+        Duration=5
+    })
+    return
+
+elseif input == "Zeus-khangtra" then
+    unlocked = true
+    keyUI.Enabled = false
+
+    saveKey()
+
+    game:GetService("StarterGui"):SetCore("SendNotification",{
+        Title="THÀNH CÔNG",
+        Text="Key vĩnh viễn!",
+        Duration=5
+    })
+    return
+end
+
+-- =================-- ================= SETTINGS =================
 
 local HitboxEnabled = false
 local ESPEnabled = false
