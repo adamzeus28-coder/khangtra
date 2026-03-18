@@ -1,3 +1,87 @@
+-- ================= ZEUS KEY SYSTEM =================
+
+local unlocked = false
+
+local keyUI = Instance.new("ScreenGui", game.CoreGui)
+keyUI.ResetOnSpawn = false
+
+local main = Instance.new("Frame", keyUI)
+main.Size = UDim2.new(0,300,0,180)
+main.Position = UDim2.new(0.5,-150,0.5,-90)
+main.BackgroundColor3 = Color3.fromRGB(20,20,20)
+Instance.new("UICorner", main)
+
+local title = Instance.new("TextLabel", main)
+title.Size = UDim2.new(1,0,0,40)
+title.BackgroundTransparency = 1
+title.Text = "ZEUS KEY SYSTEM"
+title.TextColor3 = Color3.fromRGB(0,255,255)
+title.Font = Enum.Font.Arcade
+title.TextSize = 22
+
+local box = Instance.new("TextBox", main)
+box.Size = UDim2.new(0.8,0,0,35)
+box.Position = UDim2.new(0.1,0,0.3,0)
+box.PlaceholderText = "Nhập key..."
+box.Text = ""
+box.Font = Enum.Font.Arcade
+box.TextSize = 18
+Instance.new("UICorner", box)
+
+local getKey = Instance.new("TextButton", main)
+getKey.Size = UDim2.new(0.8,0,0,30)
+getKey.Position = UDim2.new(0.1,0,0.55,0)
+getKey.Text = "GET KEY"
+getKey.Font = Enum.Font.Arcade
+getKey.TextSize = 18
+getKey.BackgroundColor3 = Color3.fromRGB(0,170,255)
+Instance.new("UICorner", getKey)
+
+local check = Instance.new("TextButton", main)
+check.Size = UDim2.new(0.8,0,0,30)
+check.Position = UDim2.new(0.1,0,0.75,0)
+check.Text = "XÁC NHẬN"
+check.Font = Enum.Font.Arcade
+check.TextSize = 18
+check.BackgroundColor3 = Color3.fromRGB(0,255,0)
+Instance.new("UICorner", check)
+
+-- LINK 4M (.com)
+getKey.MouseButton1Click:Connect(function()
+    setclipboard("https://link4m.com/o2lp2xx")
+
+    game:GetService("StarterGui"):SetCore("SendNotification",{
+        Title="GET KEY",
+        Text="Đã copy link! Mở trình duyệt để lấy key",
+        Duration=5
+    })
+end)
+
+-- CHECK KEY (DUY NHẤT)
+check.MouseButton1Click:Connect(function()
+    if box.Text == "zeus-admin" then
+        unlocked = true
+        keyUI:Destroy()
+
+        game:GetService("StarterGui"):SetCore("SendNotification",{
+            Title="SUCCESS",
+            Text="Key đúng!",
+            Duration=5
+        })
+    else
+        game:GetService("StarterGui"):SetCore("SendNotification",{
+            Title="ERROR",
+            Text="Sai key!",
+            Duration=5
+        })
+    end
+end)
+
+repeat task.wait() until unlocked
+
+-- ================= END KEY SYSTEM =================
+
+
 local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
@@ -54,14 +138,14 @@ frame.Visible = false
 Instance.new("UICorner",frame)
 
 -- TITLE
-local title = Instance.new("TextLabel")
-title.Parent = frame
-title.Size = UDim2.new(1,0,0,40)
-title.BackgroundTransparency = 1
-title.Text = "Zeus Hub v2"
-title.Font = Enum.Font.Arcade
-title.TextSize = 24
-title.TextColor3 = Color3.fromRGB(0,255,0)
+local title2 = Instance.new("TextLabel")
+title2.Parent = frame
+title2.Size = UDim2.new(1,0,0,40)
+title2.BackgroundTransparency = 1
+title2.Text = "Zeus Hub v2"
+title2.Font = Enum.Font.Arcade
+title2.TextSize = 24
+title2.TextColor3 = Color3.fromRGB(0,255,0)
 
 -- ESP BUTTON
 local espButton = Instance.new("TextButton",frame)
